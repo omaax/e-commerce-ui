@@ -1,25 +1,16 @@
 import ProductInteraction from "@/components/ProductInteraction";
-import { ProductType } from "@/types";
+import { products } from "@/data/products";
+import { notFound } from "next/navigation";
 import Image from "next/image";
 
-const product: ProductType = {
-  id: 1,
-  name: "Adidas CoreFit T-Shirt",
-  shortDescription:
-    "Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit.",
-  description:
-    "Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit. Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit. Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit.",
-  price: 59.9,
-  sizes: ["xs", "s", "m", "l", "xl"],
-  colors: ["gray", "purple", "green"],
-  images: {
-    gray: "/products/1g.png",
-    purple: "/products/1p.png",
-    green: "/products/1gr.png",
-  },
-};
-
-export const generateMetadata = async () => {
+export const generateMetadata = async ({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) => {
+  const { id } = await params;
+  const product = products.find((p) => p.id === Number(id));
+  if (!product) return { title: "Product Not Found" };
   return {
     title: product.name,
     description: product.description,
@@ -33,8 +24,11 @@ const ProductPage = async ({
   params: Promise<{ id: string }>;
   searchParams: Promise<{ color: string; size: string }>;
 }) => {
-  const { size, color } = await searchParams;
+  const { id } = await params;
+  const product = products.find((p) => p.id === Number(id));
+  if (!product) notFound();
 
+  const { size, color } = await searchParams;
   const selectedSize = size || (product.sizes[0] as string);
   const selectedColor = color || (product.colors[0] as string);
   return (
