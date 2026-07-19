@@ -25,8 +25,8 @@ const Homepage = async ({
   const category = (await searchParams).category;
   return (
     <>
-      <div className="relative left-1/2 -translate-x-1/2 w-screen overflow-x-hidden ">
-        <div className="h-[320px] md:h-[420px] lg:h-[450px] mb-4">
+      <div className="relative left-1/2 -translate-x-1/2 w-screen">
+        <div className="h-[320px] md:h-[420px] lg:h-[450px]">
           <Image
             src="/featured.png"
             alt="Featured Product"
